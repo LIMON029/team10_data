@@ -2,6 +2,7 @@
 import requests
 import xml.etree.ElementTree as ET
 
+# 시도코드를 구하는 함수
 def getSidoCodes():
     f = open('sidocodes.txt', 'r', encoding='utf-8')
     lines = f.readlines()
@@ -10,11 +11,15 @@ def getSidoCodes():
 
     for line in lines:
         codes = line.split()
+        # 시도코드는 시군구코드의 앞자리부분을 의미하고
+        # params로 넘겨줄 때는 xx0000 형태로 넘겨주어야
         sidoCodes[codes[0]] = str(int(codes[0])//10000 * 10000)
 
     f.close()
     return sidoCodes
 
+# 추출한 xml문자열에서 필요한 내용을 추출할 부분
+# totUseQty : 사용량
 def parse(xmlData):
     tree = ET.ElementTree(ET.fromstring(xmlData))
     childs = tree.iter('totUseQty')
@@ -28,6 +33,8 @@ def parse(xmlData):
 
     return count
 
+# 데이터를 추출하여 저장하는 부분
+# 현재는 텍스트파일로 저장하지만 추후에 excel파일로 저장하는 코드를 추가할 예정
 def getData():
     sidoCodes = getSidoCodes()
     data = dict()
