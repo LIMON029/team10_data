@@ -106,6 +106,8 @@ def updateDataFile(sgguCode, sidoCode, meftDivNo, data):
         use.append(uses[0])
         use.append(uses[1])
     sheet.append([meftDivNo, meftDiv[meftDivNo], sidoNames[sidoCode], sgguNames[sgguCode]]+use)
+    if sidoCode == '410000':
+        sheet.append([meftDivNo, meftDiv[meftDivNo], sidoNames[sidoCode], '전체'] + use)
     print([meftDivNo, meftDiv[meftDivNo], sidoNames[sidoCode], sgguNames[sgguCode]]+use)
     workbook.save('./datafile.xlsx')
     workbook.close()
@@ -144,7 +146,6 @@ def getData():
     sgguCodes = getSgguNames().keys()
     diagYms = getDiagYms()
     meftDivNos = getMeftDivNos()
-    last_sidoCode = 0
     data = dict()
     iter = 0
     count = 0
@@ -152,6 +153,7 @@ def getData():
     url = 'http://apis.data.go.kr/B551182/msupUserInfoService/getMeftDivAreaList'
 
     for meftDivNo in meftDivNos:
+        last_sidoCode = 0
         iter += 1
         if iter > 3:
             return
